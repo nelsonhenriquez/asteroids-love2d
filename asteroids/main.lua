@@ -1,79 +1,39 @@
 function love.load()
+    local ship_class = require "ship"
 
-    love.window.setTitle("Asteroids")
-
-    --screen
-    WIDTH, HEIGHT = love.window.getMode( )
-
-    --ship object
-    ship = {}
-
-    --ship's center (origin)
-    ship.cx = WIDTH / 2
-    ship.cy = HEIGHT / 2
-
-    --vertices of triangle
-    ship.x1, ship.y1 = 0,0
-    ship.x2, ship.y2 = 0,0
-    ship.x3, ship.y3 = 0,0
-
-    --ship velocity
-    ship.vx, ship.vy = 0, 0
-
-    --ship rotation speed
-    ship.rspeed = 2.5
-
-    ship.angle = math.rad(270)
-
-    ship.speed = 5
+    player = ship_class:new()
 end
 
 function love.update(dt) --dt: delta time, time in seconds since last frame
+    bulletsToRemove = {}
+    player:update(dt)
 
-    --input and controls
-    if love.keyboard.isDown("up") then
-        ship.vx = ship.vx + math.cos(ship.angle) * ship.speed * dt
-        ship.vy = ship.vy + math.sin(ship.angle) * ship.speed * dt
+    for i, bullet in ipairs(player.bullets) do
+       bullet:update(dt)
+
+       if bullet.x > WINDOW_WIDTH or bullet.x < 0 or 
+       bullet.y > WINDOW_HEIGHT or bullet.y < 0 then
+            table.insert(bulletsToRemove, i)
+       end
     end
 
-    if love.keyboard.isDown("left") then
-        ship.angle = ship.angle - ship.rspeed * dt
+    -- Remove bullets marked for deletion
+    for i = #bulletsToRemove, 1, -1 do
+        table.remove(player.bullets, bulletsToRemove[i])
     end
-
-    if love.keyboard.isDown("right") then
-        ship.angle = ship.angle + ship.rspeed * dt
-    end
-
-    updateShip()
-
-end
-
-function updateShip()    
-    ship.x1, ship.y1 = ship.cx + 10, ship.cy + 8
-    ship.x2, ship.y2 = ship.cx, ship.cy - 15
-    ship.x3, ship.y3 = ship.cx - 10, ship.cy + 8 
-
-    ship.cx = ship.cx + ship.vx
-    ship.cy = ship.cy + ship.vy   
 end
 
 function love.draw()
+    player:draw()
 
-    drawShip()
-    
+    for _, bullet in ipairs(player.bullets) do
+        bullet:draw()
+    end
 end
 
-function drawShip()
-    love.graphics.push() --put off all translations and rotations until pop
-    love.graphics.translate(ship.cx, ship.cy) --move origin of coordinate plane to ship center
-    love.graphics.rotate(ship.angle - math.rad(270)) --rotate entire coordinate plane
-    love.graphics.translate(-ship.cx, -ship.cy) --move origin back
-
-    --draw ship
-    love.graphics.polygon("line",
-        ship.x1,ship.y1,
-        ship.x2,ship.y2,
-        ship.x3,ship.y3)
-
-    love.graphics.pop() --apply all translations and rotations
-end
+--[[
+    to do:
+    * learn how love object release works
+    * implement shooting
+    * implement spawning asteroids
+    * implement screen wrapping]]
