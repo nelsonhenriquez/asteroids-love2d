@@ -26,7 +26,7 @@ function love.update(dt) --dt: delta time, time in seconds since last frame
        end
     end
 
-    for i, asteroid in ipairs(asteroids) do
+    for _, asteroid in ipairs(asteroids) do
         asteroid:update(dt)
      end
 
@@ -43,7 +43,7 @@ function love.draw()
         bullet:draw()
     end
 
-    for i, asteroid in ipairs(asteroids) do
+    for _, asteroid in ipairs(asteroids) do
         asteroid:draw()
      end
 
@@ -51,7 +51,18 @@ end
 
 --[[
     to do:
-    * learn how love object release works
-    * implement shooting
-    * implement spawning asteroids
-    * implement screen wrapping]]
+    
+    * change asteroid to use big sprite and small sprite instead of love2d.circle()
+    
+    * player collision with asteroids (reset game state)
+
+    * bullet collision with asteroids (asteroid splits into two smaller asteroids, that go off at an angle from the origial path)
+    
+    [finish asteroid logic]
+        * asteroids should spawn around the margin and point toward the center of the screen on creation
+        * spawn a couple asteroids on game start
+        * without exceeding a hardcoded limit, (ex. only 12 roids on screen at once) 
+          spawn a new asteroid every time a small asteroid is destroyed
+
+    * add a score counter at top middle
+--]]

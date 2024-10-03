@@ -54,6 +54,11 @@ end
                 table.insert(self.bullets, b:new(self.cx, self.cy, math.cos(self.angle), math.sin(self.angle)))
                 end
             end
+
+            if self.cx < 0 then self.cx = WINDOW_WIDTH end
+            if self.cx > WINDOW_WIDTH then self.cx = 0 end
+            if self.cy < 0 then self.cy = WINDOW_HEIGHT end
+            if self.cy > WINDOW_HEIGHT then self.cy = 0 end
         
    
            --calculate position of ship vertices
