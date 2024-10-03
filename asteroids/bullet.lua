@@ -28,7 +28,9 @@ function Bullet:update(dt)
 end
 
 function Bullet:draw()
+    love.graphics.push()
     love.graphics.circle("line", self.x, self.y, self.radius)
+    love.graphics.pop()
 end
 
 return Bullet
