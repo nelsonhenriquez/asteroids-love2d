@@ -10,7 +10,7 @@ function Asteroid:new(x, y)
         self.x = x
         self.y = y
 
-        self.radius = 90
+        self.radius = 70
 
         self.angle = math.random(0, 359)
 
